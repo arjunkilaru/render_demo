@@ -35,7 +35,8 @@ tickers = list(xlsx_data.keys())
 
 app.layout = html.Div([
     html.H1("Ticker Selector"),
-    html.H2("Here you can select a ticker and view all days where abnormal daily trading volume occured at the open, hinting at a potential unlock. Average Trading Volume shows the fraction of daily volume traded at the open. Below you can input a date and find the highest fraction stocks for that date. Please enter dates in the MM-DD format."),
+    html.H2("Here you can select a ticker and view all days where abnormal daily trading volume occured at the open, hinting at a potential unlock. Average Trading Volume shows the fraction of daily volume traded at the open. Average Percent Change shows the average change from the day before's close to the high volume day's open, with the standard deviation as well. The units are percent. Below you can input a date and find the highest fraction stocks for that date. Please enter dates in the MM-DD format.", style={'font-size': '16px', 'font-weight': 'normal'}),
+    dcc.Dropdown(,
     dcc.Dropdown(
         id='ticker-selector',
         options=[{'label': ticker, 'value': ticker} for ticker in tickers],
