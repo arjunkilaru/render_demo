@@ -26,21 +26,6 @@ def get_dates(date, dicf):
     ret = ret.rename(columns={ret.columns[0]: 'Ticker'})
     return ret
 
-def is_third_friday(date):
-    # Function to check if a date is the third Friday of the month
-    # Implement your logic here and return True or False accordingly
-    # Example implementation assuming `date` is a string in 'YYYY-MM-DD' format:
-    parsed_date = pd.to_datetime(date)
-    return (parsed_date.weekday() == 4) and (15 <= parsed_date.day <= 21)
-
-def format_date_cell(value):
-    # Custom formatting function to apply styling to individual elements in the 'Dates' column
-    if isinstance(value, list):
-        return html.Ul([
-            html.Li(html.Span(date, style={'color': 'red'})) if is_third_friday(date) else html.Li(date)
-            for date in value
-        ])
-    return value
 
 app = Dash(__name__)
 server = app.server
@@ -50,7 +35,7 @@ tickers = list(xlsx_data.keys())
 
 app.layout = html.Div([
     html.H1("Ticker Selector"),
-    html.H2("This application allows you to select a ticker and retrieve relevant data."),
+    html.H2("Here you can select a ticker and view all days where abnormal daily trading volume occured at the open, hinting at a potential unlock. Average Trading Volume shows the fraction of daily volume traded at the open. Below you can input a date and find the highest fraction stocks for that date. Please enter dates in the MM-DD format"),
     dcc.Dropdown(
         id='ticker-selector',
         options=[{'label': ticker, 'value': ticker} for ticker in tickers],
@@ -70,10 +55,7 @@ def display_table(selected_ticker):
     df = xlsx_data[selected_ticker]
     return dash_table.DataTable(
         data=df.to_dict('records'),
-        columns=[
-            {'name': i, 'id': i, 'type': 'text', 'presentation': 'markdown', 'format': format_date_cell} if i == 'Dates' else {'name': i, 'id': i, 'type': 'text'}
-            for i in df.columns
-        ]
+        columns=[{'name': i, 'id': i} for i in df.columns]
     )
 
 @app.callback(
@@ -91,4 +73,3 @@ def display_date_table(n_clicks, date_input):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
