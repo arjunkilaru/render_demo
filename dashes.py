@@ -1,4 +1,4 @@
-from dash import dcc, html, Dash, Input, Output
+from dash import dcc, html, Dash, Input, Output, dash_table
 import pandas as pd
 import openpyxl
 
@@ -24,12 +24,9 @@ app.layout = html.Div([
 )
 def display_table(selected_ticker):
     df = xlsx_data[selected_ticker]
-    return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in df.columns])] +
-
-        # Body
-        [html.Tr([html.Td(df.iloc[i][col]) for col in df.columns]) for i in range(len(df))]
+    return dash_table.DataTable(
+        data=df.to_dict('records'),
+        columns=[{'name': i, 'id': i} for i in df.columns]
     )
 
 if __name__ == '__main__':
