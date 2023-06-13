@@ -1,5 +1,4 @@
-from dash import dcc, html, Dash
-from dash.dependencies import Input, Output
+from dash import dcc, html, Dash, Input, Output
 import pandas as pd
 
 app = Dash(__name__)
