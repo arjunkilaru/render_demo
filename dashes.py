@@ -3,7 +3,7 @@ from dash.dependencies import Input, Output
 import pandas as pd
 
 app = Dash(__name__)
-
+server = app.server
 xlsx_file = 'ticks.xlsx'
 xlsx_data = pd.read_excel(xlsx_file, sheet_name=None)
 tickers = list(xlsx_data.keys())
