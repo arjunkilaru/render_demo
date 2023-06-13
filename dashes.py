@@ -16,10 +16,7 @@ app.layout = html.Div([
         value=tickers[0]
     ),
     html.Div(id='table-container'),
-    html.Div([
-        dcc.Input(id='date-input', type='text', placeholder='Enter a date'),
-        html.Button('Submit', id='submit-button')
-    ]),
+    dcc.Input(id='date-input', type='text', placeholder='Enter a date'),
     html.Div(id='date-table-container'),
 ])
 
@@ -36,11 +33,10 @@ def display_table(selected_ticker):
 
 @app.callback(
     Output('date-table-container', 'children'),
-    Input('submit-button', 'n_clicks'),
-    State('date-input', 'value')
+    Input('date-input', 'value')
 )
-def display_date_table(n_clicks, date_input):
-    if n_clicks and date_input:
+def display_date_table(date_input):
+    if date_input:
         df = get_dates(date_input, xlsx_data)
         return dash_table.DataTable(
             data=df.to_dict('records'),
