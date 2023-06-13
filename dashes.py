@@ -1,6 +1,6 @@
 from dash import dcc, html, Dash, Input, Output
 import pandas as pd
-#import openpyxl
+import openpyxl
 
 app = Dash(__name__)
 server = app.server
