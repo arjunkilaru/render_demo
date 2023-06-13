@@ -2,6 +2,30 @@ from dash import dcc, html, Dash, Input, Output, dash_table
 import pandas as pd
 import openpyxl
 
+def get_dates(date, dicf):
+    ret = pd.DataFrame()
+    class BreakOutOfLoops(Exception):
+        pass
+
+    for name in dicf.keys():
+        df = dicf[name]
+        dates = df['Dates'].tolist()
+        try:
+            for elem in dates:
+                for d in elem:
+                    if date in elem:
+                        row = df[df['Dates'] == elem].reset_index(drop = True)
+                        row['Unnamed: 0'] = name
+                        ret = pd.concat([ret, row])
+                        raise BreakOutOfLoops
+        except BreakOutOfLoops:
+            pass
+    ret = ret.sort_values(by = 'Average Volume Fraction', ascending = False)
+    ret = ret.rename(columns={ret.columns[0]: 'Ticker'})
+    return ret
+
+
+
 app = Dash(__name__)
 server = app.server
 xlsx_file = 'ticks.xlsx'
